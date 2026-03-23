@@ -33,3 +33,7 @@ This wiki is in development.
 * The permanent URLs avoid having special characters in URLs and needing redirects to reorganize.
 * The node system solves the problem of wiki disorganization by having a hierarchy for everything.
 * The content stagnation problem is solved by pushing recent content to the top and making it easy to archive pages while still keeping them around.
+
+## Discussion
+
+The levels are who, what, when, where, and how. You can skip level levels, but you can’t put them in a different order. Who is who it’s done for or who’s doing it. What is the project, area, or resource. When is the year. Where is the physical and virtual location that work is done. And how was the method that you using, like the type of work. this is similar to the PARA method, where projects are short-term goals, areas are long-term goals, resources are referenced material, and archives are archived. So the real question is how to split apart what area. PAR is what and archived is a status.
