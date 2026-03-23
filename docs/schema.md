@@ -38,7 +38,7 @@
 
 ```sql
 CREATE TABLE user (
-    user_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     username VARCHAR(63) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
@@ -46,8 +46,8 @@ CREATE TABLE user (
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    created_by BIGINT UNSIGNED NULL,
-    updated_by BIGINT UNSIGNED NULL,
+    created_by INT UNSIGNED NULL,
+    updated_by INT UNSIGNED NULL,
 
     CONSTRAINT pk_user PRIMARY KEY (user_id),
     CONSTRAINT uq_user_email UNIQUE (email),
@@ -64,15 +64,15 @@ COMMENT ON COLUMN user.role IS 'Admin has auto-approve for page edits; standard 
 
 ```sql
 CREATE TABLE node (
-    node_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    parent_id BIGINT UNSIGNED NULL COMMENT 'NULL for root nodes',
+    node_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    parent_id INT UNSIGNED NULL COMMENT 'NULL for root nodes',
     name VARCHAR(255) NOT NULL,
     path VARCHAR(1000) NOT NULL COMMENT 'Materialized path for efficient tree queries, e.g., /1/2/5/',
     level INT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Depth in hierarchy (0 = root)',
     sort_order INT NOT NULL DEFAULT 0,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by BIGINT UNSIGNED NULL,
+    created_by INT UNSIGNED NULL,
 
     CONSTRAINT pk_node PRIMARY KEY (node_id),
     CONSTRAINT fk_node_parent FOREIGN KEY (parent_id) REFERENCES node(node_id) ON DELETE RESTRICT,
@@ -93,8 +93,8 @@ CREATE INDEX ix_node_updated_at ON node(updated_at DESC);
 
 ```sql
 CREATE TABLE page (
-    page_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    node_id BIGINT UNSIGNED NOT NULL,
+    page_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    node_id INT UNSIGNED NOT NULL,
     title VARCHAR(255) NOT NULL,
     summary VARCHAR(255) NOT NULL COMMENT 'Plain text preview for browsing',
     body TEXT NOT NULL COMMENT 'Markdown content',
@@ -104,8 +104,8 @@ CREATE TABLE page (
     link_count INT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Count of pages linking to this page',
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by BIGINT UNSIGNED NULL,
-    updated_by BIGINT UNSIGNED NULL,
+    created_by INT UNSIGNED NULL,
+    updated_by INT UNSIGNED NULL,
 
     CONSTRAINT pk_page PRIMARY KEY (page_id),
     CONSTRAINT fk_page_node FOREIGN KEY (node_id) REFERENCES node(node_id) ON DELETE RESTRICT,
@@ -130,14 +130,14 @@ CREATE INDEX ix_page_freshness_at ON page(freshness_at DESC);
 
 ```sql
 CREATE TABLE file (
-    file_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    file_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     filename VARCHAR(255) NOT NULL,
     storage_path VARCHAR(1000) NOT NULL COMMENT 'Object storage reference (S3 key, etc.)',
     content_type VARCHAR(127) NOT NULL,
-    file_size_bytes BIGINT UNSIGNED NOT NULL,
+    file_size_bytes INT UNSIGNED NOT NULL,
     checksum VARCHAR(64) NOT NULL COMMENT 'SHA-256 hash for integrity verification',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by BIGINT UNSIGNED NULL,
+    created_by INT UNSIGNED NULL,
 
     CONSTRAINT pk_file PRIMARY KEY (file_id),
     CONSTRAINT fk_file_created_by FOREIGN KEY (created_by) REFERENCES user(user_id) ON DELETE SET NULL,
@@ -154,11 +154,11 @@ CREATE INDEX ix_file_content_type ON file(content_type);
 
 ```sql
 CREATE TABLE tag (
-    tag_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    tag_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(63) NOT NULL COMMENT 'Lowercase, hyphenated (e.g., tutorial, getting-started)',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    created_by BIGINT UNSIGNED NULL,
+    created_by INT UNSIGNED NULL,
 
     CONSTRAINT pk_tag PRIMARY KEY (tag_id),
     CONSTRAINT uq_tag_name UNIQUE (name),
@@ -175,8 +175,8 @@ CREATE INDEX ix_tag_name ON tag(name);
 
 ```sql
 CREATE TABLE page_tag (
-    page_id BIGINT UNSIGNED NOT NULL,
-    tag_id BIGINT UNSIGNED NOT NULL,
+    page_id INT UNSIGNED NOT NULL,
+    tag_id INT UNSIGNED NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT pk_page_tag PRIMARY KEY (page_id, tag_id),
@@ -193,9 +193,9 @@ CREATE INDEX ix_page_tag_tag_id ON page_tag(tag_id);
 
 ```sql
 CREATE TABLE comment (
-    comment_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    page_id BIGINT UNSIGNED NOT NULL,
-    parent_comment_id BIGINT UNSIGNED NULL COMMENT 'NULL for root-level comments',
+    comment_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    page_id INT UNSIGNED NOT NULL,
+    parent_comment_id INT UNSIGNED NULL COMMENT 'NULL for root-level comments',
     author_name VARCHAR(63) NOT NULL,
     author_email VARCHAR(255) NOT NULL COMMENT 'Not exposed publicly — CLASSIFICATION: PII',
     body TEXT NOT NULL,
@@ -221,8 +221,8 @@ CREATE INDEX ix_comment_created_at ON comment(created_at DESC);
 
 ```sql
 CREATE TABLE watchlist (
-    user_id BIGINT UNSIGNED NOT NULL,
-    page_id BIGINT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    page_id INT UNSIGNED NOT NULL,
     notify_on_edit BOOLEAN NOT NULL DEFAULT TRUE,
     notify_on_comment BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -241,16 +241,16 @@ CREATE INDEX ix_watchlist_page_id ON watchlist(page_id);
 
 ```sql
 CREATE TABLE page_version (
-    version_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    page_id BIGINT UNSIGNED NOT NULL,
+    version_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    page_id INT UNSIGNED NOT NULL,
     title VARCHAR(255) NOT NULL,
     summary VARCHAR(255) NOT NULL,
     body TEXT NOT NULL,
     version_date DATE NOT NULL COMMENT 'Date of this version snapshot',
     is_draft BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'Drafts overwritten same day',
     is_approved BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'Admin edits auto-approved',
-    author_id BIGINT UNSIGNED NULL,
-    reviewer_id BIGINT UNSIGNED NULL,
+    author_id INT UNSIGNED NULL,
+    reviewer_id INT UNSIGNED NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT pk_page_version PRIMARY KEY (version_id),
@@ -271,8 +271,8 @@ CREATE INDEX ix_page_version_date ON page_version(version_date DESC);
 
 ```sql
 CREATE TABLE page_lock (
-    page_id BIGINT UNSIGNED NOT NULL,
-    user_id BIGINT UNSIGNED NOT NULL,
+    page_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
     locked_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT pk_page_lock PRIMARY KEY (page_id),
@@ -333,7 +333,7 @@ COMMENT ON TABLE page_lock IS 'Single-user edit locks — cleared by manual canc
 | :--------- | :------------------------ | :------: | :----: | :------ |
 | Naming     | §2.1.1 Table Names        | **MUST** | 🟢 PASS | All tables use singular nouns |
 | Naming     | §2.1.2 Column Names       | **MUST** | 🟢 PASS | snake_case, semantic prefixes (is_, _at, _id) |
-| Keys       | §3.1.2 Primary Keys       | **MUST** | 🟢 PASS | BIGINT GENERATED ALWAYS AS IDENTITY on all tables |
+| Keys       | §3.1.2 Primary Keys       | **MUST** | 🟢 PASS | INT GENERATED ALWAYS AS IDENTITY on all tables |
 | Keys       | §3.1.3 Foreign Keys       | **MUST** | 🟢 PASS | All FKs have explicit ON DELETE/UPDATE actions |
 | Integrity  | §3.2.1 NOT NULL           | SHOULD   | 🟢 PASS | Non-nullable columns enforced |
 | Integrity  | §3.4.1 Currency           | **MUST** | 🟢 PASS | N/A — no monetary data |
