@@ -59,3 +59,7 @@ While FreshWiki allows you to name your nodes whatever you want, we suggest stru
 * **How:** The method or type of work being done.
 
 *(Note: This is structurally similar to the PARA method—Projects, Areas, Resources, Archives. In FreshWiki, "Projects, Areas, and Resources" fit into the "What" level, while "Archive" is handled natively by the page status flag).*
+
+## Development notes
+
+* [MySQL schema](docs/schema.md)
