@@ -299,7 +299,7 @@ COMMENT ON TABLE page_lock IS 'Single-user edit locks — cleared by manual canc
 │watchlist│   │       page           │
 └─────────┘   │                      │
     │         │  node_id ────────────┘
-    │         │  tag_id ──────────────┐
+    │         │  tag_id ─────────────┐
     │         └──────────────────────│
     │                   1:N          │
     ▼                   ▼            ▼
@@ -312,7 +312,7 @@ COMMENT ON TABLE page_lock IS 'Single-user edit locks — cleared by manual canc
 
 ┌──────────┐       ┌──────────────────┐
 │  comment │◄──────│   page           │
-└──────────┘  1:N   └──────────────────┘
+└──────────┘  1:N  └──────────────────┘
     │
     │ self-ref (parent_comment_id)
     ▼
@@ -320,9 +320,9 @@ COMMENT ON TABLE page_lock IS 'Single-user edit locks — cleared by manual canc
 │  comment │
 └──────────┘
 
-┌──────────┐
+┌───────────┐
 │ page_lock │
-└──────────┘
+└───────────┘
 ```
 
 ---
