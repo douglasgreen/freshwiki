@@ -27,7 +27,7 @@
 | `page_tag`   | Many-to-many join table                          |
 | `comment`    | Threaded discussions on pages                    |
 | `watchlist`  | User page subscriptions                          |
-| `page_version` | Anti-bloat versioning storage                  |
+| `page_edit_log`| Diff-based edit history storage                |
 | `page_lock`  | Single-user edit locks                           |
 
 ---
@@ -304,10 +304,9 @@ COMMENT ON TABLE page_lock IS 'Single-user edit locks — cleared by manual canc
     │                   1:N          │
     ▼                   ▼            ▼
 ┌──────────────────┐  ┌──────────┐  ┌─────┐
-│ page_version     │  │  tag     │  │file │
+│ page_edit_log    │  │  tag     │  │file │
 │                  │  └──────────┘  └─────┘
-│ author_id ───────┼──┘
-│ reviewer_id ─────┼──┘
+│ created_by ──────┼──┘
 └──────────────────┘
 
 ┌──────────┐       ┌──────────────────┐
