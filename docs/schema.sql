@@ -12,7 +12,7 @@ CREATE TABLE user (
     updated_at timestamp NOT NULL default current_timestamp ON UPDATE current_timestamp,
     CONSTRAINT pk_user PRIMARY KEY (user_id),
     CONSTRAINT uq_user_email UNIQUE (email),
-    CONSTRAINT uq_user_username UNIQUE (username),
+    CONSTRAINT uq_user_username UNIQUE (username)
 ) engine = innodb default charset = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 
