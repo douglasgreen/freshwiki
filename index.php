@@ -47,8 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'node_create') {
         $result = $nodeController->handleCreate(
             $_POST['name'] ?? '',
-            isset($_POST['parent_id']) && $_POST['parent_id'] !== '' ? (int)$_POST['parent_id'] : null,
-            (int)($_POST['sort_order'] ?? 0)
+            isset($_POST['parent_id']) && $_POST['parent_id'] !== '' ? (int)$_POST['parent_id'] : null
         );
         if ($result['success']) {
             header('Location: index.php?action=node');

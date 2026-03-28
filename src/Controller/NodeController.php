@@ -28,7 +28,7 @@ class NodeController
         ]);
     }
 
-    public function handleCreate(string $name, ?int $parentId, int $sortOrder): array
+    public function handleCreate(string $name, ?int $parentId): array
     {
         if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
             return ['success' => false, 'errors' => ['Unauthorized access.']];
@@ -47,12 +47,11 @@ class NodeController
         }
 
         $stmt = $this->pdo->prepare(
-            'INSERT INTO node (parent_id, name, sort_order, created_by) VALUES (?, ?, ?, ?)'
+            'INSERT INTO node (parent_id, name, created_by) VALUES (?, ?, ?)'
         );
         $stmt->execute([
             $parentId ?: null,
             $name,
-            $sortOrder,
             $_SESSION['user_id'] ?? null
         ]);
 
@@ -87,7 +86,7 @@ class NodeController
 
     private function getNodeTree(): array
     {
-        $stmt = $this->pdo->query('SELECT * FROM node ORDER BY sort_order, name');
+        $stmt = $this->pdo->query('SELECT * FROM node ORDER BY name');
         $nodes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $this->buildTree($nodes, null);
