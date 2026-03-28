@@ -12,7 +12,9 @@
   <div class="row">
     <div class="col-md-8">
       <div class="card shadow mb-4">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <div
+          class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
+        >
           <h4 class="mb-0">
             {% if browse_data.current_node %}
               {{ browse_data.current_node.name }}
@@ -29,8 +31,12 @@
           {% if browse_data.current_node %}
             <nav aria-label="breadcrumb" class="mb-3">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="?action=browse">Home</a></li>
-                <li class="breadcrumb-item active">{{ browse_data.current_node.name }}</li>
+                <li class="breadcrumb-item">
+                  <a href="?action=browse">Home</a>
+                </li>
+                <li class="breadcrumb-item active">
+                  {{ browse_data.current_node.name }}
+                </li>
               </ol>
             </nav>
           {% endif %}
@@ -40,9 +46,14 @@
             <h5>Categories</h5>
             <div class="list-group mb-4">
               {% for node in browse_data.child_nodes %}
-                <a href="?n={{ node.node_id }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                <a
+                  href="?n={{ node.node_id }}"
+                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                >
                   {{ node.name }}
-                  <span class="badge bg-secondary rounded-pill">ID: {{ node.node_id }}</span>
+                  <span class="badge bg-secondary rounded-pill">
+                    ID: {{ node.node_id }}
+                  </span>
                 </a>
               {% endfor %}
             </div>
@@ -53,7 +64,10 @@
             <h5>Pages</h5>
             <div class="list-group mb-4">
               {% for page in browse_data.pages %}
-                <a href="?p={{ page.page_id }}" class="list-group-item list-group-item-action">
+                <a
+                  href="?p={{ page.page_id }}"
+                  class="list-group-item list-group-item-action"
+                >
                   <div class="d-flex w-100 justify-content-between">
                     <h6 class="mb-1">{{ page.title }}</h6>
                     <small>ID: {{ page.page_id }}</small>
@@ -69,19 +83,29 @@
             <h5>Files</h5>
             <div class="list-group">
               {% for file in browse_data.files %}
-                <a href="?f={{ file.file_id }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                <a
+                  href="?f={{ file.file_id }}"
+                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                >
                   <div>
                     <span class="me-2">{{ file.filename }}</span>
                     <small class="text-muted">({{ file.content_type }})</small>
                   </div>
-                  <span class="badge bg-secondary rounded-pill">ID: {{ file.file_id }}</span>
+                  <span class="badge bg-secondary rounded-pill">
+                    ID: {{ file.file_id }}
+                  </span>
                 </a>
               {% endfor %}
             </div>
           {% endif %}
 
-          {% if browse_data.child_nodes is empty and browse_data.pages is empty and browse_data.files is empty %}
-            <p class="text-muted">No content found.</p>
+          {% if
+            browse_data.child_nodes is empty
+              and browse_data.pages is empty
+              and browse_data.files is empty %}
+            <p class="text-muted">
+              No content found.
+            </p>
           {% endif %}
         </div>
       </div>
@@ -95,8 +119,12 @@
         <div class="card-body">
           <div class="d-grid gap-2">
             <a href="?" class="btn btn-outline-primary">Back to Welcome</a>
-            <a href="?action=node" class="btn btn-outline-primary">Node Management</a>
-            <a href="?action=tag" class="btn btn-outline-secondary">Tag Management</a>
+            <a href="?action=node" class="btn btn-outline-primary">
+              Node Management
+            </a>
+            <a href="?action=tag" class="btn btn-outline-secondary">
+              Tag Management
+            </a>
             <a href="?action=logout" class="btn btn-outline-danger">Logout</a>
           </div>
         </div>

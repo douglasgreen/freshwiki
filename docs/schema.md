@@ -19,11 +19,11 @@
 ## Entity Relationship Summary
 
 | Entity          | Purpose                                          |
-| :-------------- | :----------------------------------------------- |
+| :-------------- | :----------------------------------------------- | ----------------------------------- |
 | `user`          | Authentication and authorization                 |
 | `node`          | Hierarchical category tree (IDs permanent)       |
 | `page`          | Wiki content pages (leaf nodes under categories) |
-| `file`          | Media files stored in database (MEDIUMBLOB)       | (associated with nodes via node_id)
+| `file`          | Media files stored in database (MEDIUMBLOB)      | (associated with nodes via node_id) |
 | `tag`           | Lowercase hyphenated tags                        |
 | `page_tag`      | Many-to-many join table                          |
 | `comment`       | Threaded discussions on pages                    |

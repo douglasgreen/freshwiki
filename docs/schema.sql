@@ -99,6 +99,7 @@ CREATE TABLE file (
 
 CREATE INDEX ix_file_node_id ON file (node_id);
 
+
 CREATE INDEX ix_file_content_type ON file (content_type);
 
 

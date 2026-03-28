@@ -8,13 +8,17 @@
   <div class="row">
     <div class="col-md-8">
       <div class="card shadow">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <div
+          class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
+        >
           <h4 class="mb-0">Tags</h4>
           <a href="index.php" class="btn btn-sm btn-light">Back to Home</a>
         </div>
         <div class="card-body">
           {% if tags is empty %}
-            <p class="text-muted">No tags found.</p>
+            <p class="text-muted">
+              No tags found.
+            </p>
           {% else %}
             <div class="table-responsive">
               <table class="table table-striped">
@@ -36,9 +40,23 @@
                       <td>{{ tag.page_count }}</td>
                       {% if is_admin %}
                         <td class="text-end">
-                          <form method="POST" action="?action=tag_delete" class="d-inline" onsubmit="return confirm('Delete this tag?');">
-                            <input type="hidden" name="tag_id" value="{{ tag.tag_id }}">
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                          <form
+                            method="POST"
+                            action="?action=tag_delete"
+                            class="d-inline"
+                            onsubmit="return confirm('Delete this tag?');"
+                          >
+                            <input
+                              type="hidden"
+                              name="tag_id"
+                              value="{{ tag.tag_id }}"
+                            />
+                            <button
+                              type="submit"
+                              class="btn btn-sm btn-outline-danger"
+                            >
+                              Delete
+                            </button>
                           </form>
                         </td>
                       {% endif %}
@@ -53,23 +71,35 @@
     </div>
 
     {% if is_admin %}
-    <div class="col-md-4">
-      <div class="card shadow">
-        <div class="card-header bg-success text-white">
-          <h5 class="mb-0">Create Tag</h5>
-        </div>
-        <div class="card-body">
-          <form method="POST" action="?action=tag_create">
-            <div class="mb-3">
-              <label for="name" class="form-label">Tag Name</label>
-              <input type="text" class="form-control" id="name" name="name" required maxlength="63" placeholder="e.g., getting-started">
-              <div class="form-text">Lowercase letters, numbers, and hyphens only.</div>
-            </div>
-            <button type="submit" class="btn btn-success w-100">Create Tag</button>
-          </form>
+      <div class="col-md-4">
+        <div class="card shadow">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Create Tag</h5>
+          </div>
+          <div class="card-body">
+            <form method="POST" action="?action=tag_create">
+              <div class="mb-3">
+                <label for="name" class="form-label">Tag Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  name="name"
+                  required
+                  maxlength="63"
+                  placeholder="e.g., getting-started"
+                />
+                <div class="form-text">
+                  Lowercase letters, numbers, and hyphens only.
+                </div>
+              </div>
+              <button type="submit" class="btn btn-success w-100">
+                Create Tag
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
     {% endif %}
   </div>
 {% endblock %}
