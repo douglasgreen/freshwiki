@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use DouglasGreen\FreshWiki\Controller\NodeController;
 use DouglasGreen\FreshWiki\Controller\UserController;
 
 // Load configuration
@@ -34,14 +35,39 @@ $twig = new \Twig\Environment($loader, [
 // Initialize session
 session_start();
 
-// Create controller
+// Create controllers
 $controller = new UserController($pdo, $twig);
+$nodeController = new NodeController($pdo, $twig);
 
 // Route requests
 $action = $_GET['action'] ?? 'login';
 
 // Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($action === 'node_create') {
+        $result = $nodeController->handleCreate(
+            $_POST['name'] ?? '',
+            isset($_POST['parent_id']) && $_POST['parent_id'] !== '' ? (int)$_POST['parent_id'] : null,
+            (int)($_POST['sort_order'] ?? 0)
+        );
+        if ($result['success']) {
+            header('Location: index.php?action=node');
+            exit;
+        }
+        echo $nodeController->showNodes($result['errors'] ?? []);
+        exit;
+    }
+
+    if ($action === 'node_delete') {
+        $result = $nodeController->handleDelete((int)($_POST['node_id'] ?? 0));
+        if ($result['success']) {
+            header('Location: index.php?action=node');
+            exit;
+        }
+        echo $nodeController->showNodes($result['errors'] ?? []);
+        exit;
+    }
+
     if ($action === 'login') {
         $result = $controller->handleLogin(
             $_POST['username'] ?? '',
@@ -89,6 +115,11 @@ if ($action === 'logout') {
 // Check if user is logged in
 if (isset($_SESSION['user_id'])) {
     echo $controller->showWelcome($_SESSION['username']);
+    exit;
+}
+
+if ($action === 'node') {
+    echo $nodeController->showNodes();
     exit;
 }
 

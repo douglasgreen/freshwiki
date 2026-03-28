@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% macro renderNodeTree(nodes, is_admin) %}
+  <ul class="list-unstyled">
+    {% for node in nodes %}
+      <li>
+        <div class="d-flex align-items-center mb-2">
+          <span class="me-2">{{ node.name }}</span>
+          <small class="text-muted">(ID: {{ node.node_id }})</small>
+          {% if is_admin %}
+            <form method="POST" action="?action=node_delete" class="ms-auto d-inline" onsubmit="return confirm('Delete this node?');">
+              <input type="hidden" name="node_id" value="{{ node.node_id }}">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          {% endif %}
+        </div>
+        {% if node.children is not empty %}
+          <div class="ms-4">
+            {{ _self.renderNodeTree(node.children, is_admin) }}
+          </div>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endmacro %}
+
+{% macro renderNodeOptions(nodes, level = 0) %}
+  {% for node in nodes %}
+    <option value="{{ node.node_id }}">
+      {% for i in 1..level %}—{% endfor %} {{ node.name }}
+    </option>
+    {% if node.children is not empty %}
+      {{ _self.renderNodeOptions(node.children, level + 1) }}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{% block title %}
+  Node Management - FreshWiki
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Node Hierarchy</h4>
+        </div>
+        <div class="card-body">
+          {% if nodes is empty %}
+            <p class="text-muted">No nodes found.</p>
+          {% else %}
+            {{ _self.renderNodeTree(nodes, is_admin) }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% if is_admin %}
+    <div class="col-md-4">
+      <div class="card shadow">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Create Node</h5>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="?action=node_create">
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name" required maxlength="255">
+            </div>
+            <div class="mb-3">
+              <label for="parent_id" class="form-label">Parent Node</label>
+              <select class="form-select" id="parent_id" name="parent_id">
+                <option value="">None (Root)</option>
+                {{ _self.renderNodeOptions(nodes) }}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="sort_order" class="form-label">Sort Order</label>
+              <input type="number" class="form-control" id="sort_order" name="sort_order" value="0">
+            </div>
+            <button type="submit" class="btn btn-success w-100">Create Node</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+{% endblock %}
