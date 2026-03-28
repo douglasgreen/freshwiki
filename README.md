@@ -1,64 +1,102 @@
 # FreshWiki
 
-**FreshWiki** is an opinionated, hierarchy-first wiki engine built on PHP and MySQL. 
+**FreshWiki** is an opinionated, hierarchy-first wiki engine built on PHP and MySQL.
 
-Most wikis rely heavily on manual indexing, search bars, and fragile text-based URLs that break when titles change. FreshWiki takes a different approach. It is designed to solve wiki disorganization and content stagnation by enforcing a strict node-based hierarchy, using permanent ID-based URLs, and dynamically surfacing recently updated content.
+Most wikis rely heavily on manual indexing, search bars, and fragile text-based URLs that break when
+titles change. FreshWiki takes a different approach. It is designed to solve wiki disorganization
+and content stagnation by enforcing a strict node-based hierarchy, using permanent ID-based URLs,
+and dynamically surfacing recently updated content.
 
-*(Note: FreshWiki is currently in development.)*
+_(Note: FreshWiki is currently in development.)_
 
 ## Core Concepts
 
-FreshWiki relies on four primary entities, all of which use permanent numeric IDs for routing to eliminate broken links and the need for redirects. Standard name-based URL slugs are intentionally not supported.
+FreshWiki relies on four primary entities, all of which use permanent numeric IDs for routing to
+eliminate broken links and the need for redirects. Standard name-based URL slugs are intentionally
+not supported.
 
-* **Nodes (`c=1`):** A hierarchy of numbered categories (e.g., `c=1` "General", `c=2` "Help"). 
-* **Pages (`p=1`):** The actual wiki content. Every page *must* be a leaf residing under one (and only one) node.
-* **Files (`f=1`):** Numbered media files, such as images or videos (e.g., `f=1` "logo.png").
-* **Tags (`t=123`):** Lowercase, hyphenated tags assigned to pages. Tag pages automatically list all associated content. Because they use numeric URLs, renaming a tag never breaks incoming links.
+- **Nodes (`c=1`):** A hierarchy of numbered categories (e.g., `c=1` "General", `c=2` "Help").
+- **Pages (`p=1`):** The actual wiki content. Every page _must_ be a leaf residing under one (and
+  only one) node.
+- **Files (`f=1`):** Numbered media files, such as images or videos (e.g., `f=1` "logo.png").
+- **Tags (`t=123`):** Lowercase, hyphenated tags assigned to pages. Tag pages automatically list all
+  associated content. Because they use numeric URLs, renaming a tag never breaks incoming links.
 
 ## Key Features
 
 ### Content & Navigation
-* **Hierarchy-First Browsing:** Unlike traditional wikis that rely on flat structures and search, FreshWiki promotes hierarchical browsing as the primary mode of navigation.
-* **Dynamic "Freshness" Sorting:** Categories and pages are always listed with the most recently edited content at the top. When a page is modified, the modification timestamp is propagated up the entire node tree, bubbling active categories to the top of the sidebar.
-* **Page Anatomy:** Every page consists of a Title, a Summary (up to 255 characters of plain text displayed during browsing), and a Body written in **Markdown**.
-* **Archiving & Freshness Flags:** 
-    * **Archived:** Pages can be flagged as archived, removing them from standard browsing and search (unless "search archived pages" is toggled).
-    * **Freshness:** Active pages have a "fresh" timestamp indicating the last time the content was comprehensively reviewed and confirmed by a user.
-* **Threaded Discussions:** Every page features a built-in threaded comments section for questions and discussion.
-* **Watchlists:** Users can watch specific pages to track edits and new comments.
+
+- **Hierarchy-First Browsing:** Unlike traditional wikis that rely on flat structures and search,
+  FreshWiki promotes hierarchical browsing as the primary mode of navigation.
+- **Dynamic "Freshness" Sorting:** Categories and pages are always listed with the most recently
+  edited content at the top. When a page is modified, the modification timestamp is propagated up
+  the entire node tree, bubbling active categories to the top of the sidebar.
+- **Page Anatomy:** Every page consists of a Title, a Summary (up to 255 characters of plain text
+  displayed during browsing), and a Body written in **Markdown**.
+- **Archiving & Freshness Flags:**
+  - **Archived:** Pages can be flagged as archived, removing them from standard browsing and search
+    (unless "search archived pages" is toggled).
+  - **Freshness:** Active pages have a "fresh" timestamp indicating the last time the content was
+    comprehensively reviewed and confirmed by a user.
+- **Threaded Discussions:** Every page features a built-in threaded comments section for questions
+  and discussion.
+- **Watchlists:** Users can watch specific pages to track edits and new comments.
 
 ### Versioning & Collaboration
-* **Diff-Based Version History:** To optimize storage while maintaining a complete history, FreshWiki stores only the latest version of each page in the main table. Historical changes are recorded as unified diffs (generated by `jfcherng/php-diff`) in an edit log, along with user-provided change messages.
-* **Single-User Locks:** Only one user may edit a page at a time. Locks are cleared by manual cancellation rather than timeouts.
+
+- **Diff-Based Version History:** To optimize storage while maintaining a complete history,
+  FreshWiki stores only the latest version of each page in the main table. Historical changes are
+  recorded as unified diffs (generated by `jfcherng/php-diff`) in an edit log, along with
+  user-provided change messages.
+- **Single-User Locks:** Only one user may edit a page at a time. Locks are cleared by manual
+  cancellation rather than timeouts.
 
 ### Management Tools
-* **Visual Node Manager:** Editing the wiki's category structure is handled on a single, interactive JavaScript-based tree page that dynamically tracks node IDs during additions, deletions, and renames.
-* **Similarity Finder:** A "find similar pages" tool ranks pages by similarity to help admins find and eliminate duplicate content. Similarity is determined using a vector diff of the top 20 term counts.
-* **Rich Reporting:** Built-in reports track the most viewed, most linked, and most edited pages, alongside a daily summary of the wiki's change log.
-* **CLI Support:** Command-line scripts are provided for batch importing, exporting, and node management.
+
+- **Visual Node Manager:** Editing the wiki's category structure is handled on a single, interactive
+  JavaScript-based tree page that dynamically tracks node IDs during additions, deletions, and
+  renames.
+- **Similarity Finder:** A "find similar pages" tool ranks pages by similarity to help admins find
+  and eliminate duplicate content. Similarity is determined using a vector diff of the top 20 term
+  counts.
+- **Rich Reporting:** Built-in reports track the most viewed, most linked, and most edited pages,
+  alongside a daily summary of the wiki's change log.
+- **CLI Support:** Command-line scripts are provided for batch importing, exporting, and node
+  management.
 
 ---
 
 ## The Problems FreshWiki Solves
 
-1. **Link Rot & URL Maintenance:** By using permanent ID-based URLs, titles can be changed, tags can be renamed, and pages can be moved without ever breaking a link or requiring redirect management.
-2. **Wiki Disorganization:** The strict node system forces content into a logical hierarchy, preventing the "orphan page" problem common in flat wikis.
-3. **Content Stagnation & Decay:** By aggressively pushing recently edited content and active nodes to the top of the UI, and by providing built-in "Archived" and "Freshness" statuses, the wiki naturally highlights active knowledge and makes it easy to retire outdated information.
+1. **Link Rot & URL Maintenance:** By using permanent ID-based URLs, titles can be changed, tags can
+   be renamed, and pages can be moved without ever breaking a link or requiring redirect management.
+2. **Wiki Disorganization:** The strict node system forces content into a logical hierarchy,
+   preventing the "orphan page" problem common in flat wikis.
+3. **Content Stagnation & Decay:** By aggressively pushing recently edited content and active nodes
+   to the top of the UI, and by providing built-in "Archived" and "Freshness" statuses, the wiki
+   naturally highlights active knowledge and makes it easy to retire outdated information.
 
 ---
 
 ## Best Practices: The 5-Level Philosophy
 
-While FreshWiki allows you to name your nodes whatever you want, we suggest structuring your hierarchy using the **"Who, What, When, Where, How"** philosophy. You can skip levels, but maintaining this order keeps content predictable.
+While FreshWiki allows you to name your nodes whatever you want, we suggest structuring your
+hierarchy using the **"Who, What, When, Where, How"** philosophy. You can skip levels, but
+maintaining this order keeps content predictable.
 
-* **Who:** The team doing the work or the audience it is for (e.g., `Users/`).
-* **What:** The project, area, or resource. *Note: This is usually the broadest category and may require sub-nodes to split up large areas.*
-* **When:** The year or time period (e.g., `Blogs/2022`). *Because FreshWiki sorts by recent edits, placing old blog posts into a "When" node prevents a 2022 post from jumping to the top of your entire blog feed if you fix a typo today.*
-* **Where:** The physical or virtual location of the work, if distinction is needed.
-* **How:** The method or type of work being done.
+- **Who:** The team doing the work or the audience it is for (e.g., `Users/`).
+- **What:** The project, area, or resource. _Note: This is usually the broadest category and may
+  require sub-nodes to split up large areas._
+- **When:** The year or time period (e.g., `Blogs/2022`). _Because FreshWiki sorts by recent edits,
+  placing old blog posts into a "When" node prevents a 2022 post from jumping to the top of your
+  entire blog feed if you fix a typo today._
+- **Where:** The physical or virtual location of the work, if distinction is needed.
+- **How:** The method or type of work being done.
 
-*(Note: This is structurally similar to the PARA method—Projects, Areas, Resources, Archives. In FreshWiki, "Projects, Areas, and Resources" fit into the "What" level, while "Archive" is handled natively by the page status flag).*
+_(Note: This is structurally similar to the PARA method—Projects, Areas, Resources, Archives. In
+FreshWiki, "Projects, Areas, and Resources" fit into the "What" level, while "Archive" is handled
+natively by the page status flag)._
 
 ## Development notes
 
-* [MySQL schema](docs/schema.md)
+- [MySQL schema](docs/schema.md)
