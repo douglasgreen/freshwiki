@@ -78,6 +78,7 @@ CREATE INDEX ix_page_freshness_at ON page (freshness_at DESC);
 
 CREATE TABLE file (
     file_id INT UNSIGNED NOT NULL auto_increment,
+    node_id INT UNSIGNED NULL,
     filename VARCHAR(255) NOT NULL,
     body MEDIUMBLOB NOT NULL,
     content_type VARCHAR(127) NOT NULL,
@@ -89,11 +90,14 @@ CREATE TABLE file (
     created_by INT UNSIGNED NULL,
     updated_by INT UNSIGNED NULL,
     CONSTRAINT pk_file PRIMARY KEY (file_id),
+    CONSTRAINT fk_file_node FOREIGN KEY (node_id) REFERENCES node (node_id) ON DELETE RESTRICT,
     CONSTRAINT fk_file_created_by FOREIGN KEY (created_by) REFERENCES user (user_id) ON DELETE SET NULL,
     CONSTRAINT fk_file_updated_by FOREIGN KEY (updated_by) REFERENCES user (user_id) ON DELETE SET NULL,
     CONSTRAINT uq_file_checksum UNIQUE (checksum)
 ) engine = innodb default charset = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+
+CREATE INDEX ix_file_node_id ON file (node_id);
 
 CREATE INDEX ix_file_content_type ON file (content_type);
 

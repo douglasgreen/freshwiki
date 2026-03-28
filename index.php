@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use DouglasGreen\FreshWiki\Controller\BrowseController;
 use DouglasGreen\FreshWiki\Controller\NodeController;
 use DouglasGreen\FreshWiki\Controller\TagController;
 use DouglasGreen\FreshWiki\Controller\UserController;
@@ -40,6 +41,7 @@ session_start();
 $controller = new UserController($pdo, $twig);
 $nodeController = new NodeController($pdo, $twig);
 $tagController = new TagController($pdo, $twig);
+$browseController = new BrowseController($pdo, $twig);
 
 // Route requests
 $action = $_GET['action'] ?? 'login';
@@ -148,11 +150,13 @@ if ($action === 'node') {
 // Handle node browsing (?n=X)
 if (isset($_GET['n'])) {
     $nodeId = $_GET['n'] !== '' ? (int)$_GET['n'] : null;
-    $browseData = $nodeController->getNodeAndChildren($nodeId);
-    echo $twig->render('welcome.html.twig', [
-        'username' => $_SESSION['username'] ?? 'Guest',
-        'browse_data' => $browseData
-    ]);
+    echo $browseController->showBrowse($nodeId);
+    exit;
+}
+
+// Handle browse action
+if ($action === 'browse') {
+    echo $browseController->showBrowse(null);
     exit;
 }
 
