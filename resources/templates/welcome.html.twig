@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Welcome - FreshWiki
+{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Welcome to FreshWiki</h4>
+        </div>
+        <div class="card-body">
+          <p class="lead">Hello, {{ username }}!</p>
+          <p>You are now logged in. This is a placeholder welcome page.</p>
+          <a href="?action=logout" class="btn btn-outline-primary">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

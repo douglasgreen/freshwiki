@@ -80,6 +80,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Handle GET requests
+if ($action === 'logout') {
+    session_destroy();
+    header('Location: index.php');
+    exit;
+}
+
+// Check if user is logged in
+if (isset($_SESSION['user_id'])) {
+    echo $controller->showWelcome($_SESSION['username']);
+    exit;
+}
+
 if ($action === 'register') {
     echo $controller->showRegister();
 } else {

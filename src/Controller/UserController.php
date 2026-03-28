@@ -26,6 +26,11 @@ class UserController
         return $this->twig->render('register.html.twig', ['errors' => $errors]);
     }
 
+    public function showWelcome(string $username): string
+    {
+        return $this->twig->render('welcome.html.twig', ['username' => $username]);
+    }
+
     public function handleLogin(string $username, string $password): array
     {
         $errors = [];
