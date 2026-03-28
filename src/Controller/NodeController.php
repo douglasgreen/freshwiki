@@ -46,6 +46,16 @@ class NodeController
             return ['success' => false, 'errors' => $errors];
         }
 
+        // Check if parent node has reached maximum children limit
+        if ($parentId !== null) {
+            $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM node WHERE parent_id = ?');
+            $stmt->execute([$parentId]);
+            $childCount = (int)$stmt->fetchColumn();
+            if ($childCount >= 100) {
+                return ['success' => false, 'errors' => ['Parent node has reached the maximum limit of 100 children.']];
+            }
+        }
+
         $stmt = $this->pdo->prepare(
             'INSERT INTO node (parent_id, name, created_by) VALUES (?, ?, ?)'
         );
