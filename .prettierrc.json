@@ -11,7 +11,7 @@
   "endOfLine": "lf",
   "htmlWhitespaceSensitivity": "css",
   "vueIndentScriptAndStyle": false,
-  "plugins": ["prettier-plugin-sql"],
+  "plugins": ["prettier-plugin-sql", "@zackad/prettier-plugin-twig"],
   "overrides": [
     {
       "files": ["*.html", "*.htm"],

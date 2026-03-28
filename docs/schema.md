@@ -41,7 +41,7 @@ See [schema SQL](schema.sql).
 
 ## Schema Diagram (ASCII)
 
-```
+```plain
 ┌─────────┐       ┌─────────┐       ┌──────────┐
 │  user   │◄──────│  node   │◄──────│   page   │
 └─────────┘  1:N  └─────────┘  1:N  └──────────┘
