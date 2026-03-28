@@ -23,7 +23,7 @@
 | `user`          | Authentication and authorization                 |
 | `node`          | Hierarchical category tree (IDs permanent)       |
 | `page`          | Wiki content pages (leaf nodes under categories) |
-| `file`          | Media files with permanent IDs                   |
+| `file`          | Media files stored in database (MEDIUMBLOB)       |
 | `tag`           | Lowercase hyphenated tags                        |
 | `page_tag`      | Many-to-many join table                          |
 | `comment`       | Threaded discussions on pages                    |

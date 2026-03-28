@@ -79,19 +79,32 @@ CREATE INDEX ix_page_freshness_at ON page (freshness_at DESC);
 CREATE TABLE file (
     file_id INT UNSIGNED NOT NULL auto_increment,
     filename VARCHAR(255) NOT NULL,
-    storage_path VARCHAR(1000) NOT NULL,
+    body MEDIUMBLOB NOT NULL,
     content_type VARCHAR(127) NOT NULL,
     file_size_bytes INT UNSIGNED NOT NULL,
     checksum VARCHAR(64) NOT NULL,
+    is_archived BOOLEAN NOT NULL default FALSE,
+    updated_at timestamp NOT NULL default current_timestamp ON UPDATE current_timestamp,
     created_at timestamp NOT NULL default current_timestamp,
     created_by INT UNSIGNED NULL,
+    updated_by INT UNSIGNED NULL,
     CONSTRAINT pk_file PRIMARY KEY (file_id),
     CONSTRAINT fk_file_created_by FOREIGN KEY (created_by) REFERENCES user (user_id) ON DELETE SET NULL,
+    CONSTRAINT fk_file_updated_by FOREIGN KEY (updated_by) REFERENCES user (user_id) ON DELETE SET NULL,
     CONSTRAINT uq_file_checksum UNIQUE (checksum)
 ) engine = innodb default charset = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 
 CREATE INDEX ix_file_content_type ON file (content_type);
+
+
+CREATE INDEX ix_file_updated_at ON file (updated_at DESC);
+
+
+CREATE INDEX ix_file_created_at ON file (created_at DESC);
+
+
+CREATE INDEX ix_file_is_archived ON file (is_archived);
 
 
 CREATE TABLE tag (
