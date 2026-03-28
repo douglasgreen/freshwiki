@@ -3,6 +3,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use DouglasGreen\FreshWiki\Controller\NodeController;
+use DouglasGreen\FreshWiki\Controller\TagController;
 use DouglasGreen\FreshWiki\Controller\UserController;
 
 // Load configuration
@@ -38,6 +39,7 @@ session_start();
 // Create controllers
 $controller = new UserController($pdo, $twig);
 $nodeController = new NodeController($pdo, $twig);
+$tagController = new TagController($pdo, $twig);
 
 // Route requests
 $action = $_GET['action'] ?? 'login';
@@ -57,6 +59,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    if ($action === 'tag_create') {
+        $result = $tagController->handleCreate(
+            $_POST['name'] ?? ''
+        );
+        if ($result['success']) {
+            header('Location: index.php?action=tag');
+            exit;
+        }
+        echo $tagController->showTags($result['errors'] ?? []);
+        exit;
+    }
+
     if ($action === 'node_delete') {
         $result = $nodeController->handleDelete((int)($_POST['node_id'] ?? 0));
         if ($result['success']) {
@@ -64,6 +78,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
         echo $nodeController->showNodes($result['errors'] ?? []);
+        exit;
+    }
+
+    if ($action === 'tag_delete') {
+        $result = $tagController->handleDelete((int)($_POST['tag_id'] ?? 0));
+        if ($result['success']) {
+            header('Location: index.php?action=tag');
+            exit;
+        }
+        echo $tagController->showTags($result['errors'] ?? []);
         exit;
     }
 
@@ -118,6 +142,16 @@ if ($action === 'node') {
         exit;
     }
     echo $nodeController->showNodes();
+    exit;
+}
+
+if ($action === 'tag') {
+    // Require login for tag management
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: index.php');
+        exit;
+    }
+    echo $tagController->showTags();
     exit;
 }
 
