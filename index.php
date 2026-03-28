@@ -44,7 +44,7 @@ $action = $_GET['action'] ?? 'login';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'login') {
         $result = $controller->handleLogin(
-            $_POST['email'] ?? '',
+            $_POST['username'] ?? '',
             $_POST['password'] ?? ''
         );
         if ($result['success']) {

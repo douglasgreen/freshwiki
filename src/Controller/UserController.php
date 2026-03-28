@@ -26,12 +26,12 @@ class UserController
         return $this->twig->render('register.html.twig', ['errors' => $errors]);
     }
 
-    public function handleLogin(string $email, string $password): array
+    public function handleLogin(string $username, string $password): array
     {
         $errors = [];
 
-        if (empty($email)) {
-            $errors[] = 'Email is required.';
+        if (empty($username)) {
+            $errors[] = 'Username is required.';
         }
 
         if (empty($password)) {
@@ -42,8 +42,8 @@ class UserController
             return ['success' => false, 'errors' => $errors];
         }
 
-        $stmt = $this->pdo->prepare('SELECT * FROM user WHERE email = ?');
-        $stmt->execute([$email]);
+        $stmt = $this->pdo->prepare('SELECT * FROM user WHERE username = ?');
+        $stmt->execute([$username]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$user) {
