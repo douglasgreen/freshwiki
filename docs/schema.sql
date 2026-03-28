@@ -20,6 +20,7 @@ CREATE TABLE node (
     node_id INT UNSIGNED NOT NULL auto_increment,
     parent_id INT UNSIGNED NULL,
     name VARCHAR(255) NOT NULL,
+    path VARCHAR(255) NOT NULL,
     sort_order INT NOT NULL default 0,
     updated_at timestamp NOT NULL default current_timestamp ON UPDATE current_timestamp,
     created_at timestamp NOT NULL default current_timestamp,
