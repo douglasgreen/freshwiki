@@ -20,7 +20,6 @@ CREATE TABLE node (
     node_id INT UNSIGNED NOT NULL auto_increment,
     parent_id INT UNSIGNED NULL,
     name VARCHAR(255) NOT NULL,
-    path VARCHAR(255) NOT NULL,
     sort_order INT NOT NULL default 0,
     updated_at timestamp NOT NULL default current_timestamp ON UPDATE current_timestamp,
     created_at timestamp NOT NULL default current_timestamp,
@@ -36,9 +35,6 @@ CREATE TABLE node (
 
 
 CREATE INDEX ix_node_parent_id ON node (parent_id);
-
-
-CREATE INDEX ix_node_path ON node (path);
 
 
 CREATE INDEX ix_node_updated_at ON node (updated_at DESC);
