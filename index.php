@@ -112,14 +112,19 @@ if ($action === 'logout') {
     exit;
 }
 
-// Check if user is logged in
-if (isset($_SESSION['user_id'])) {
-    echo $controller->showWelcome($_SESSION['username']);
+if ($action === 'node') {
+    // Require login for node management
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: index.php');
+        exit;
+    }
+    echo $nodeController->showNodes();
     exit;
 }
 
-if ($action === 'node') {
-    echo $nodeController->showNodes();
+// Check if user is logged in
+if (isset($_SESSION['user_id'])) {
+    echo $controller->showWelcome($_SESSION['username']);
     exit;
 }
 
