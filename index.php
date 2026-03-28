@@ -145,6 +145,17 @@ if ($action === 'node') {
     exit;
 }
 
+// Handle node browsing (?n=X)
+if (isset($_GET['n'])) {
+    $nodeId = $_GET['n'] !== '' ? (int)$_GET['n'] : null;
+    $browseData = $nodeController->getNodeAndChildren($nodeId);
+    echo $twig->render('welcome.html.twig', [
+        'username' => $_SESSION['username'] ?? 'Guest',
+        'browse_data' => $browseData
+    ]);
+    exit;
+}
+
 if ($action === 'tag') {
     // Require login for tag management
     if (!isset($_SESSION['user_id'])) {

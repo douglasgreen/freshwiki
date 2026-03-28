@@ -1,23 +1,86 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Welcome - FreshWiki
+  {% if browse_data.current_node %}
+    {{ browse_data.current_node.name }} - FreshWiki
+  {% else %}
+    FreshWiki
+  {% endif %}
 {% endblock %}
 
 {% block content %}
-  <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-      <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-          <h4 class="mb-0">Welcome to FreshWiki</h4>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            {% if browse_data.current_node %}
+              {{ browse_data.current_node.name }}
+            {% else %}
+              FreshWiki
+            {% endif %}
+          </h4>
+          {% if browse_data.current_node %}
+            <a href="?" class="btn btn-sm btn-light">Root</a>
+          {% endif %}
         </div>
         <div class="card-body">
-          <p class="lead">Hello, {{ username }}!</p>
-          <p>You are now logged in. This is a placeholder welcome page.</p>
-          <div class="d-flex gap-2">
-            <a href="?action=node" class="btn btn-primary">Node Management</a>
-            <a href="?action=tag" class="btn btn-secondary">Tag Management</a>
-            <a href="?action=logout" class="btn btn-outline-primary">Logout</a>
+          {# Breadcrumb #}
+          {% if browse_data.current_node %}
+            <nav aria-label="breadcrumb" class="mb-3">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="?">Home</a></li>
+                <li class="breadcrumb-item active">{{ browse_data.current_node.name }}</li>
+              </ol>
+            </nav>
+          {% endif %}
+
+          {# Child Nodes #}
+          {% if browse_data.child_nodes is not empty %}
+            <h5>Categories</h5>
+            <div class="list-group mb-4">
+              {% for node in browse_data.child_nodes %}
+                <a href="?n={{ node.node_id }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                  {{ node.name }}
+                  <span class="badge bg-secondary rounded-pill">ID: {{ node.node_id }}</span>
+                </a>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {# Pages #}
+          {% if browse_data.pages is not empty %}
+            <h5>Pages</h5>
+            <div class="list-group">
+              {% for page in browse_data.pages %}
+                <a href="?p={{ page.page_id }}" class="list-group-item list-group-item-action">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">{{ page.title }}</h6>
+                    <small>ID: {{ page.page_id }}</small>
+                  </div>
+                  <small class="text-muted">{{ page.summary }}</small>
+                </a>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if browse_data.child_nodes is empty and browse_data.pages is empty %}
+            <p class="text-muted">No content found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+          <h5 class="mb-0">Hello, {{ username }}!</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <a href="?action=node" class="btn btn-outline-primary">Node Management</a>
+            <a href="?action=tag" class="btn btn-outline-secondary">Tag Management</a>
+            <a href="?action=logout" class="btn btn-outline-danger">Logout</a>
           </div>
         </div>
       </div>

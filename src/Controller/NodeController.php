@@ -94,6 +94,44 @@ class NodeController
         return ['success' => true];
     }
 
+    public function getNodeAndChildren(?int $nodeId): array
+    {
+        $currentNode = null;
+        $childNodes = [];
+        $pages = [];
+
+        if ($nodeId !== null) {
+            // Get current node
+            $stmt = $this->pdo->prepare('SELECT * FROM node WHERE node_id = ?');
+            $stmt->execute([$nodeId]);
+            $currentNode = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$currentNode) {
+                return ['current_node' => null, 'child_nodes' => [], 'pages' => []];
+            }
+
+            // Get child nodes
+            $stmt = $this->pdo->prepare('SELECT * FROM node WHERE parent_id = ? ORDER BY name');
+            $stmt->execute([$nodeId]);
+            $childNodes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Get pages in this node
+            $stmt = $this->pdo->prepare('SELECT page_id, title, summary FROM page WHERE node_id = ? AND is_archived = FALSE ORDER BY updated_at DESC');
+            $stmt->execute([$nodeId]);
+            $pages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            // Get root nodes (no parent)
+            $stmt = $this->pdo->query('SELECT * FROM node WHERE parent_id IS NULL ORDER BY name');
+            $childNodes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return [
+            'current_node' => $currentNode,
+            'child_nodes' => $childNodes,
+            'pages' => $pages
+        ];
+    }
+
     private function getNodeTree(): array
     {
         $stmt = $this->pdo->query('SELECT * FROM node ORDER BY name');
