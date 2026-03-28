@@ -1,0 +1,17 @@
+{
+  "modified": "2026-03-19",
+  "name": "douglasgreen/freshwiki",
+  "version": "1.0.0",
+  "description": "An opinionated, hierarchy-first wiki engine built on PHP and MySQL",
+  "type": "module",
+  "scripts": {
+    "lint": "npm run lint:md",
+    "lint:md": "markdownlint '**/*.md'",
+    "format": "prettier --write . && markdownlint '**/*.md' --fix"
+  },
+  "devDependencies": {
+    "markdownlint-cli": "^0.47.0",
+    "prettier": "^3.8.1",
+    "prettier-plugin-sql": "^0.19.2"
+  }
+}

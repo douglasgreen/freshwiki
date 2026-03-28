@@ -67,7 +67,6 @@ CREATE TABLE node (
     node_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     parent_id INT UNSIGNED NULL COMMENT 'NULL for root nodes',
     name VARCHAR(255) NOT NULL,
-    path VARCHAR(1000) NOT NULL COMMENT 'Materialized path for efficient tree queries, e.g., /1/2/5/',
     level INT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Depth in hierarchy (0 = root)',
     sort_order INT NOT NULL DEFAULT 0,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -81,7 +80,6 @@ CREATE TABLE node (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 COMMENT ON TABLE node IS 'Hierarchical category tree — permanent IDs ensure links never break — OWNER: content-team';
-COMMENT ON COLUMN node.path IS 'Materialized path for tree traversal (e.g., /1/2/ means node under node 1 which is under root)';
 COMMENT ON COLUMN node.updated_at IS 'Propagated up tree when child pages are modified — drives sidebar sorting';
 
 CREATE INDEX ix_node_parent_id ON node(parent_id);
